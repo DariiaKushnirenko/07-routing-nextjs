@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Note, NotesResponse, NewNoteData } from "../types/note";
+import type { Note, NotesResponse, NewNoteData, NotesParams } from "../types/note";
 
 const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
@@ -15,25 +15,25 @@ export const fetchNoteById = async (id: number) => {
 };
 
 
-export const getNotes = async (search: string, page: number): Promise<NotesResponse> => {
-  const params: Record<string, string | number> = { page };
-  if (search) {
-    params.search = search;
-  }
+// export const getNotes = async (search: string, page: number): Promise<NotesResponse> => {
+//   const params: Record<string, string | number> = { page };
+//   if (search) {
+//     params.search = search;
+//   }
 
 
-  const response = await axios.get<NotesResponse>("/notes", {
-    params,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  // const response = await axios.get<NotesResponse>("/notes", {
+  //   params,
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //   },
+  // });
 
-  return {
-    notes: response.data.notes,
-    totalPages: response.data.totalPages,
-  };
-};
+//   return {
+//     notes: response.data.notes,
+//     totalPages: response.data.totalPages,
+//   };
+// };
 
 export const createNote = async (noteData: NewNoteData) => {
   const response = await axios.post<Note>("/notes", noteData, {
@@ -53,3 +53,15 @@ export const deleteNote = async (noteId: number) : Promise<Note>  => {
   return response.data;
 };
 
+export const getNotes = async (
+  params: NotesParams,
+  token: string
+): Promise<NotesResponse> => {
+  const response = await axios.get<NotesResponse>('/notes', {
+    params,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

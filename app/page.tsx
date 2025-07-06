@@ -1,5 +1,6 @@
 
-import css from "./page.module.css";
+import css from "./home.module.css";
+
 
 export default function Home() {
   return (
