@@ -1,4 +1,3 @@
-
 export interface Note {
   tag: string;
   id: number;
@@ -8,14 +7,12 @@ export interface Note {
   updatedAt: string;
 };
 
-
 export interface NewNoteData {
     title: string;
     content: string;
     tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
   }
   
- 
   export interface NotesResponse {
     notes: Note[];
     totalPages: number;
@@ -31,7 +28,7 @@ export interface NewNoteData {
   
 export interface NotesParams {
   search: string;
-  tag: 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo';
+  tag?: string;
   page: number;
   perPage: number;
   sortBy: 'created' | 'updated';

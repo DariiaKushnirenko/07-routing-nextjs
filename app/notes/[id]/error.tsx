@@ -4,7 +4,6 @@ type Props = {
    
   };
 
-
   const Error = ({ error}: Props) => {
     return (
       <div>
