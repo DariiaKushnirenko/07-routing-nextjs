@@ -1,27 +1,23 @@
 import css from "./SidebarNotes.module.css";
 import Link from "next/link";
-import { getNotes } from "@/lib/api"; 
-import type { TagName } from "@/types/note";
+
+
+const tags = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
 
 const SidebarNotes = async () => { 
-  //? як тут дістати масив тегів нотаток, аби далі з ними працювати//
-  const tags: TagName[] = await getNotes();
 
   return (
     <div>
       <ul className={css.menuList}>
-        {/* Посилання на всі нотатки */}
         <li className={css.menuItem}>
           <Link href="/notes/filter/All" className={css.menuLink}>
-            All
+            All Notes
           </Link>
         </li>
-
-        {/* Динамічний список тегів */}
         {tags.map((tag) => (
-          <li key={tag.id} className={css.menuItem}>
-            <Link href={`/notes/filter/${tag.name}`} className={css.menuLink}>
-              {tag.name}
+          <li key={tag} className={css.menuItem}>
+            <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
+              {tag}
             </Link>
           </li>
         ))}

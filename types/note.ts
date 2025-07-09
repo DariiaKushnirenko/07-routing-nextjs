@@ -18,7 +18,7 @@ export interface NewNoteData {
     totalPages: number;
   }
 
-  export interface TagName {
+  export interface Tag  {
     id: string;
     name: string;
     description: string;

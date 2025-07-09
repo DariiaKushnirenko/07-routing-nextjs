@@ -2,9 +2,9 @@
 import css from "./TagsMenu.module.css";
 import { useState } from "react";
 import Link from "next/link";
-import { TagName } from "../../types/note";
+import { Tag } from "../../types/note";
 type Props = {
-  tags: TagName[];
+  tags: Tag[];
 };
 
 export default function TagsMenu({tags }: Props) {

@@ -3,19 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import css from './NoteModal.module.css';
+import css from './Modal.module.css';
 
-type Props = {
+type ModalProps = {
   children: React.ReactNode;
+  onClose: () => void;
 };
 
-const Modal = ({ children }: Props) => {
+const Modal = ({ children }: ModalProps) => {
   const router = useRouter();
 
   const close = () => {
     router.back(); 
   };
-
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

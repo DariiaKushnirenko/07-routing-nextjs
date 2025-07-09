@@ -1,6 +1,6 @@
 "use client";
 
-import css from "../notes/NotesPage.module.css";
+import css from "../[...slug]/NotesPage.module.css";
 
 import { useState } from "react";
 import { getNotes} from "../../../../lib/api";
@@ -11,7 +11,7 @@ import SearchBox from "../../../../components/SearchBox/SearchBox";
 import NoteList from "../../../../components/NoteList/NoteList";
 import Pagination from "../../../../components/Pagination/Pagination";
 import Modal from "../../../../components/Modal/Modal";
-
+import NoteForm from "../../../../components/NoteForm/NoteForm";
 import type { NotesResponse } from "../../../../types/note";
  
 type NotesClientProps = {
@@ -21,7 +21,7 @@ type NotesClientProps = {
 };
 
 
-export default function NotesClient({ initialData, tag, initialSearch }: NotesClientProps) {
+export default function NotesClient({ initialData, tag, initialSearch}: NotesClientProps) {
   const [searchTerm, setSearchTerm] = useState(initialSearch); 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +33,9 @@ export default function NotesClient({ initialData, tag, initialSearch }: NotesCl
     setCurrentPage(1);
   };
 
-  const { data: note, isLoading, isError } = useQuery<NotesResponse, Error>({
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+  const { data } = useQuery<NotesResponse, Error>({
     queryKey: ["notes", tag, activeSearch, currentPage], 
     queryFn: () =>
       getNotes({
@@ -46,14 +48,18 @@ export default function NotesClient({ initialData, tag, initialSearch }: NotesCl
     placeholderData: keepPreviousData,
     initialData,
   });
+  const notes = data?.notes ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={searchTerm} onChange={handleSearchChange} />
-        {note && note.totalPages > 1 && (
+        <SearchBox
+          value={searchTerm}
+          onChange={handleSearchChange} />
+        {totalPages >1 && (
           <Pagination
-            totalPages={note.totalPages}
+            totalPages={totalPages}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
@@ -63,10 +69,12 @@ export default function NotesClient({ initialData, tag, initialSearch }: NotesCl
         </button>
       </header>
 
-      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Request failed</p>}
-      {note && <NoteList notes={note.notes} />}
+      {isModalOpen && (
+        <Modal onClose={toggleModal}>
+        <NoteForm onClose={toggleModal}/>
+      </Modal>
+      )}
+      {notes.length >0 && <NoteList notes = {notes}/>}
     </div>
   );
 }

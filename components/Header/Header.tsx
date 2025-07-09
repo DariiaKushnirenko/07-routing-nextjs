@@ -1,13 +1,12 @@
 import css from "./Header.module.css"
 import Link from 'next/link';
-import { getNotes } from '@/lib/api';
-import TagsMenu from "../TagsMenu/TagsMenu";
+import TagsMenu from "../TagsMenu/TagsMenu"; import type { Tag } from "@/types/note";
 
 
 const Header = async () => {
-  const tags: TagName[] = await getTags(); //як витягнути масив усіх tags, якщо backend не дає такої функції
 
-
+ 
+ const tags: Tag[] = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
   return (
     <header className={css.header}>
       <Link href="/" aria-label="Home">NoteHub</Link>
