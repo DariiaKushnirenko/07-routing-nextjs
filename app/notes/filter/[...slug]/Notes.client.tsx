@@ -18,7 +18,7 @@ import type { NotesResponse } from "../../../../types/note";
 type NotesClientProps = {
   initialData: NotesResponse;
   tag: string;
-  initialSearch?: string;
+
 };
 
 export default function NotesClient({ initialData, tag }: NotesClientProps) {
