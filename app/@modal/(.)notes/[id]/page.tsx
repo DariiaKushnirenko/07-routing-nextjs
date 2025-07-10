@@ -10,7 +10,7 @@ type NotePreviewProps = {
       const note = await fetchNoteById(Number(params.id));
 
     return (
-      <Modal onClose={() => {}}>
+      <Modal >
         <h2>{note.title}</h2>
         <p>{note.content}</p>
       </Modal>

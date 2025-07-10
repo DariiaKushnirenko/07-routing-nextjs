@@ -3,24 +3,19 @@ import NotesClient from './Notes.client';
 import { getNotes } from '@/lib/api';
 
 type Props = {
-  params: {
-    slug: string[]
+  params: Promise<{ slug: string[] }>
   };
-};
 
 const NotesPageWithFilters = async ({ params }: Props) => {
-  const { slug } = params;
-
-  // Якщо вибрано "all", то тег не передаємо (щоб не фільтрувати)
-  const category = slug [0] === 'all' ? undefined : slug [0] ;
-  const search = slug [1] ?? '';
+  const { slug } = await params;
+  const category = slug[0] 
+  const search = "";
 
   const notes = await getNotes({
-    search,
+    search: "",
     tag: category,
     page: 1,
-    perPage: 20,
-    sortBy: 'created',
+   
   });
 
   return (

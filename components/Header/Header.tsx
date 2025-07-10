@@ -1,19 +1,17 @@
 import css from "./Header.module.css"
 import Link from 'next/link';
-import TagsMenu from "../TagsMenu/TagsMenu"; import type { Tag } from "@/types/note";
+import TagsMenu from "../TagsMenu/TagsMenu";
 
 
 const Header = async () => {
 
- 
- const tags: Tag[] = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
   return (
     <header className={css.header}>
       <Link href="/" aria-label="Home">NoteHub</Link>
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
           <li><Link href="/">Home</Link></li>
-          <li><TagsMenu tags={tags} /></li>
+          <li><TagsMenu /></li>
         </ul>
       </nav>
     </header>

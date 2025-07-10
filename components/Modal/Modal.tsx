@@ -1,7 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useCallback  } from 'react';
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
 
@@ -10,12 +9,11 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const Modal = ({ children }: ModalProps) => {
-  const router = useRouter();
+const Modal = ({ children, onClose }: ModalProps) => {
+   const close = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
-  const close = () => {
-    router.back(); 
-  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

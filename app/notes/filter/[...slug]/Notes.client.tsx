@@ -6,7 +6,7 @@ import { useState } from "react";
 import { getNotes} from "../../../../lib/api";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-
+import { useRouter } from 'next/navigation';
 import SearchBox from "../../../../components/SearchBox/SearchBox";
 import NoteList from "../../../../components/NoteList/NoteList";
 import Pagination from "../../../../components/Pagination/Pagination";
@@ -20,7 +20,6 @@ type NotesClientProps = {
   initialSearch: string;
 };
 
-
 export default function NotesClient({ initialData, tag, initialSearch}: NotesClientProps) {
   const [searchTerm, setSearchTerm] = useState(initialSearch); 
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
@@ -33,7 +32,13 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
     setCurrentPage(1);
   };
 
+  const router = useRouter();
   const toggleModal = () => setIsModalOpen((prev) => !prev);
+
+  const handleCloseModal = () => {
+    toggleModal(); 
+    router.back(); 
+  };
 
   const { data } = useQuery<NotesResponse, Error>({
     queryKey: ["notes", tag, activeSearch, currentPage], 
@@ -42,8 +47,7 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
         tag: tag === 'all' ? undefined : tag as 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo',
         search: activeSearch,
         page: currentPage,
-        perPage: 20,
-        sortBy: 'created',
+        perPage: 12,
       }),
     placeholderData: keepPreviousData,
     initialData,
@@ -70,8 +74,8 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
       </header>
 
       {isModalOpen && (
-        <Modal onClose={toggleModal}>
-        <NoteForm onClose={toggleModal}/>
+        <Modal onClose={handleCloseModal}>
+        <NoteForm onClose={handleCloseModal}/>
       </Modal>
       )}
       {notes.length >0 && <NoteList notes = {notes}/>}

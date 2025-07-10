@@ -3,11 +3,11 @@ import css from "./TagsMenu.module.css";
 import { useState } from "react";
 import Link from "next/link";
 import { Tag } from "../../types/note";
-type Props = {
-  tags: Tag[];
-};
 
-export default function TagsMenu({tags }: Props) {
+const tags : Tag [] = ["Todo", "Work","Personal", "Meeting","Shopping"]
+
+
+export default function TagsMenu(){
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
@@ -19,7 +19,7 @@ export default function TagsMenu({tags }: Props) {
         <ul className={css.menuList}>
           <li className={css.menuItem}>
             <Link
-              href={`/notes/filter`}
+              href={`/notes/filter/All`}
               className={css.menuLink}
               onClick={toggle}
             >
@@ -27,13 +27,13 @@ export default function TagsMenu({tags }: Props) {
             </Link>
           </li>
           {tags.map((tag) => (
-            <li key={tag.id} className={css.menuItem}>
+            <li key={tag} className={css.menuItem}>
               <Link
-                href={`/notes/filter/${tag.name}`}
+                href={`/notes/filter/${tag}`}
                 className={css.menuLink}
                 onClick={toggle}
               >
-                {tag.name}
+                {tag}
               </Link>
             </li>
           ))}
