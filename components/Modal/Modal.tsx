@@ -14,7 +14,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose(); 
-    }
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
@@ -27,7 +27,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      close();
+      onClose(); // Виправлено тут
     }
   };
 
@@ -41,7 +41,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
       <div className={css.modal}>
         <button
           className={css.closeButton}
-          onClick={close}
+          onClick={onClose} // І тут
           aria-label="Close modal"
         >
           &times;

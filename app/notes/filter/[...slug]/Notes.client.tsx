@@ -3,25 +3,25 @@
 import css from "../[...slug]/NotesPage.module.css";
 
 import { useState } from "react";
-import { getNotes} from "../../../../lib/api";
+import { getNotes } from "../../../../lib/api";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
-import { useRouter } from 'next/navigation';
+
 import SearchBox from "../../../../components/SearchBox/SearchBox";
 import NoteList from "../../../../components/NoteList/NoteList";
 import Pagination from "../../../../components/Pagination/Pagination";
 import Modal from "../../../../components/Modal/Modal";
 import NoteForm from "../../../../components/NoteForm/NoteForm";
+
 import type { NotesResponse } from "../../../../types/note";
- 
+
 type NotesClientProps = {
   initialData: NotesResponse;
-  tag: string;       
-  initialSearch: string;
+  tag: string;
 };
 
-export default function NotesClient({ initialData, tag, initialSearch}: NotesClientProps) {
-  const [searchTerm, setSearchTerm] = useState(initialSearch); 
+export default function NotesClient({ initialData, tag }: NotesClientProps) {
+  const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,19 +32,15 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
     setCurrentPage(1);
   };
 
-  const router = useRouter();
-  const toggleModal = () => setIsModalOpen((prev) => !prev);
-
   const handleCloseModal = () => {
-    toggleModal(); 
-    router.back(); 
+    setIsModalOpen(false);
   };
 
   const { data } = useQuery<NotesResponse, Error>({
-    queryKey: ["notes", tag, activeSearch, currentPage], 
+    queryKey: ["notes", tag === "all" ? undefined : tag, activeSearch, currentPage],
     queryFn: () =>
       getNotes({
-        tag: tag === 'all' ? undefined : tag as 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo',
+        tag: tag === "all" ? undefined : (tag as 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo'),
         search: activeSearch,
         page: currentPage,
         perPage: 12,
@@ -52,16 +48,15 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
     placeholderData: keepPreviousData,
     initialData,
   });
+
   const notes = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 1;
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox
-          value={searchTerm}
-          onChange={handleSearchChange} />
-        {totalPages >1 && (
+        <SearchBox value={searchTerm} onChange={handleSearchChange} />
+        {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
@@ -75,11 +70,11 @@ export default function NotesClient({ initialData, tag, initialSearch}: NotesCli
 
       {isModalOpen && (
         <Modal onClose={handleCloseModal}>
-        <NoteForm onClose={handleCloseModal}/>
-      </Modal>
+          <NoteForm onClose={handleCloseModal} />
+        </Modal>
       )}
-      {notes.length >0 && <NoteList notes = {notes}/>}
+
+      {notes.length > 0 && <NoteList notes={notes} />}
     </div>
   );
 }
-
