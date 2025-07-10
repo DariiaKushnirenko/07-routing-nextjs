@@ -9,7 +9,6 @@ type Props = {
 const NotesPageWithFilters = async ({ params }: Props) => {
   const { slug } = await params;
   const category = slug[0] 
-  const search = "";
 
   const notes = await getNotes({
     search: "",
@@ -21,7 +20,7 @@ const NotesPageWithFilters = async ({ params }: Props) => {
   return (
     <div>
       <h2>Notes</h2>
-      <NotesClient initialData={notes} tag={slug[0]} initialSearch={search} />
+      <NotesClient initialData={notes} tag={slug[0]} />
     </div>
   );
 };
