@@ -27,7 +27,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      onClose(); // Виправлено тут
+      onClose(); 
     }
   };
 
@@ -41,7 +41,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
       <div className={css.modal}>
         <button
           className={css.closeButton}
-          onClick={onClose} // І тут
+          onClick={onClose} 
           aria-label="Close modal"
         >
           &times;
